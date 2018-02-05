@@ -139,6 +139,27 @@ $breakpoint-med: 1175px;
   flex-wrap: $value;
 }
 
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+@mixin transition($args...) {
+  -webkit-transition: $args;
+  -moz-transition: $args;
+  -ms-transition: $args;
+  -o-transition: $args;
+  transition: $args;
+}
+
+
+.cf {
+  @include clearfix;
+}
+
 .flex {
   @include flex();
 }
