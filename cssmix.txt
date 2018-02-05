@@ -1,0 +1,119 @@
+// Define the breakpoints
+$breakpoint-small: 600px;
+$breakpoint-med-small: 960px;
+$breakpoint-med: 1175px;
+
+@mixin screen($size, $type: max, $pixels: $breakpoint-small) {
+  @if $size == 'small' {
+    @media screen and ($type + -width: $breakpoint-small) {
+        @content;
+    }
+  }
+  @else if $size == 'med-small' {
+    @media screen and ($type + -width: $breakpoint-med-small) {
+        @content;
+    }
+  }
+  @else if $size == 'med' {
+    @media screen and ($type + -width: $breakpoint-med) {
+        @content;
+    }
+  }
+ @else if $size == 'large' {
+    @media screen and ($type + -width: $breakpoint-med) {
+        @content;
+    }
+  }
+  @else if $size == 'custom' {
+    @media screen and ($type + -width: $pixels + px) {
+     @content;
+    }
+  }
+  @else {
+    @content;
+  }
+}
+
+
+
+// Using the mixin
+.foo {
+  @include screen(large) {
+    width: 20%;
+  }
+  @include screen(med) {
+    width: 40%;
+  }
+  @include screen(med-small) {
+    width: 60%;
+  }
+  @include screen(small) {
+    width: 80%;
+  }
+  @include screen(custom, max, 400) {
+    width: 100%;
+  }
+}
+
+
+
+
+
+
+// Define default font size
+@function calculateRem($size) {
+  $remSize: $size / 16px;
+  @return $remSize * 1rem;
+}
+
+@mixin fontse($size) {
+  font-size: $size;
+  font-size: calculateRem($size);
+}
+//Usage
+p {
+  @include fontse(14px)
+}
+//Output
+p {
+  font-size: 14px; //For unsupported browsers
+  font-size: 0.8rem;
+}
+
+
+//Vendor
+@mixin prefix($property, $value, $vendors: webkit moz ms o, $default: true) {
+  @if $vendors {
+    @each $vendor in $vendors {
+      #{"-" + $vendor + "-" + $property}: #{$value};
+    }
+  }
+  @if $default {
+    #{$property}: #{$value};
+  }
+}
+
+html {
+  @include prefix('box-sizing', 'border-box', moz webkit);
+}
+
+*,
+*:before,
+*:after {
+  @include prefix('box-sizing', 'inherit', moz webkit);
+}
+
+
+// По дефолту - изображение на весь блок и по центру
+@mixin background($imgpath,$positionx: center,$positiony: top,$size: 100%,$repeat: no-repeat) {
+    background: {
+        image: url($imgpath);
+        position-x: $positionx;
+        position-y: $positiony;
+        repeat: $repeat;
+        size: $size;
+    }
+}
+.testing {
+    @include background('/my/img/path.png');
+}
